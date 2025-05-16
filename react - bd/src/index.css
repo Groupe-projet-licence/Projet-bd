@@ -1,0 +1,10 @@
+.bare-blue{
+  border-radius: 0 0 40px 40px;
+  background-color: #0d6efd;
+}
+
+input,
+button,
+textarea{
+  box-shadow: none ! important;
+}
