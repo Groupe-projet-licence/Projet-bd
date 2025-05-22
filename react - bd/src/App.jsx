@@ -27,7 +27,7 @@ function App() {
 
           {/* Routes pour les utilisateurs  */}
 
-          <Route path="/users" element={<Users />} />
+          {/* <Route path="/users" element={<Users />} /> */}
           <Route path="/users/register" element={<Register />} />
           <Route path="/users/login" element={<Login />} />
           <Route path="/users/:id/edit" element={<Register />} />

@@ -1,54 +1,79 @@
-import { useState } from "react"
-import { useId } from "react"
-import Header from "../Components/Header"
+/**
+ * Affiche le formulaire d'inscription 
+ */
+
+import { useEffect, useState } from "react"
 import { useUser } from "../Contexts/AuthProvider"
 import { useNavigate } from "react-router-dom"
-import Tasks from "../Tasks/Tasks"
+import { useFlashMessage } from "../Contexts/FlashProvider"
+import axios from "axios"
 
 export default function Register() {
-    const [name, setName] = useState("")
-    const id1 = useId()
+    // Pour manipuler les contextes pour l'aiuthentification et le message flash.
+    const { user, login } = useUser()
+    const { showFlashMsg } = useFlashMessage()
 
+    //L'instruction suivante permet de masquer les éventuelles messages flash issues des pages précédentes
+    showFlashMsg()
+
+    const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
-    const id2 = useId()
-
     const [password, setPassword] = useState("")
-    const id3 = useId()
 
-    const { user } = useUser()
+
     const navigate = useNavigate()
 
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const role = 'USER'
+        const credentials = { username, email, password, role }
+        try {
+            const response = await axios.post("http://localhost:8080/api/users/register ", credentials)
+            login(response.data.token)
+            navigate("/tasks")
+        } catch (e) {
+            showFlashMsg("Une erreur s'est produit et nous n'avons pas pu vous inscrire; veuillez réessayer!", "danger")
+        }
+    }
 
-    return <>
-        {user ? navigate('/tasks') :
-            (<div className="row justify-content-center container">
+    useEffect(() => {
+        if (user) {
+            navigate('/tasks')
+        }
+    }, [])
+
+
+    return <div className="container">
+        {user ? null :
+            (<div className="row justify-content-center">
                 <div className="col-12 col-md-9 col-xl-7">
-                    <form onSubmit={() => { }} method="post">
+                    <form onSubmit={handleSubmit}>
                         <div className="from-group">
-                            <label htmlFor={id1}>Nom</label>
-                            <input type="text" id={id1} className="form-control"
-                                value={name}
-                                onChange={(e) => { setName(e.target.value) }} />
+                            <label htmlFor='name'>Nom</label>
+                            <input type="text" id='name' className="form-control"
+                                value={username}
+                                onChange={(e) => { setUsername(e.target.value) }} />
                         </div>
                         <div className="from-group">
-                            <label htmlFor={id2}>Email</label>
-                            <input type="email" id={id2} className="form-control"
+                            <label htmlFor='email'>Email</label>
+                            <input type="email" id='email' className="form-control"
                                 value={email}
                                 onChange={(e) => { setEmail(e.target.value) }} />
                         </div>
                         <div className="from-group">
-                            <label htmlFor={id3}>Mot de passe</label>
-                            <input type="password" id={id3} className="form-control"
+                            <label htmlFor='password'>Mot de passe</label>
+                            <input type="password" id='password' className="form-control"
                                 value={password}
                                 onChange={(e) => { setPassword(e.target.value) }} />
                         </div>
                         <div className="text-center mt-2">
                             <button className="btn btn-primary" type="submit">
-                                Envoyer
+                                S'inscrire
                             </button>
                         </div>
                     </form>
                 </div>
-            </div>)}
-    </>
+            </div>
+            )}
+    </div>
 }

@@ -1,53 +1,71 @@
-import { useEffect, useState } from "react"
-import { useId } from "react"
+/**
+ * Composant permettant la creation et la modification d'une tache
+ */
+
+import { useEffect, useMemo, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useUser } from "../Contexts/AuthProvider"
 import { useFlashMessage } from "../Contexts/FlashProvider"
 import axios from "axios"
 
 export default function CreateEditTask() {
-    const id1 = useId()
-    const id2 = useId()
-    const id3 = useId()
-    const id4 = useId()
 
     const [task, setTask] = useState(null)
-    const { id } = useParams()
 
+    const { id } = useParams()
     const navigate = useNavigate()
+
     const { user } = useUser()
     const { showFlashMsg } = useFlashMessage()
 
     useEffect(() => {
-        const fetchTask = async () => {
+        if (!user) {
+            navigate('/users/register')
+        }
+    }, [user])
+
+    useMemo(async () => {
+        if (id) {
             try {
-                const response = await axios.get(`htpp://localhost:8080/api/tasks/${id}/edit`)
+                const token = localStorage.getItem('token')
+                const response = await axios.get(`htpp://localhost:8080/api/tasks/${id}/edit`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
                 setTask(response.data)
             } catch (e) {
                 navigate(-1)
-                showFlashMsg("Une erreur s'est produit, veuillez réessayer!", "danger")
+                showFlashMsg("Une erreur s'est produit", "danger")
             }
-        }
-        if (!user) {
-            navigate('/users/login')
-        }
-        if (id) {
-            fetchTask()
         }
     }, [])
 
+
     const handleSubmit = async (e) => {
         e.preventDefault()
+
         const title = e.target.title.value;
         const description = e.target.description.value;
         const dateline = e.target.dateline.value;
-        const status = e.target.status.value;
+        const status = e.target.status?.value ?? false;
+        const dataTask = { title, description, dateline, status }
+
+        const token = localStorage.getItem('token')
 
         try {
+
             if (!task) {
-                const response = await axios.post(`htpp://localhost:8080/api/tasks/create`, { title: title, description, dateline, status })
+                //Si c'est un nouveau produit
+
+                //La route etant protegée (on a besoin d'etre connecté pour y accéder), 
+                // on ajoute un token pour la vérification coté backend
+
+                const response = await axios.post(`htpp://localhost:8080/api/tasks/create`,
+                    dataTask, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
             } else {
-                const response = await axios.patch(`htpp://localhost:8080/api/tasks/${id}/edit`, { title: title, description, dateline, status })
+                //Si c'est un produit à modifier
+                const response = await axios.patch(`htpp://localhost:8080/api/tasks/${id}/edit`, dataTask)
             }
             navigate('/tasks')
             showFlashMsg(`Taches ${task ? 'modifier' : 'creer'} avez success`)
@@ -63,36 +81,38 @@ export default function CreateEditTask() {
             :
             <div className="row justify-content-center">
                 <div className="col-12 col-md-9 col-xl-7 mt-5">
-                    <form onSubmit={handleSubmit} method="post">
+                    <form onSubmit={handleSubmit}>
                         <div className="from-group">
-                            <label htmlFor={id1}>Titre</label>
+                            <label htmlFor='title'>Titre</label>
                             <input type="text"
                                 defaultValue={task?.title ?? ''}
                                 name="title"
-                                id={id1} className="form-control" />
+                                id='title' className="form-control" />
                         </div>
                         <div className="from-group">
-                            <label htmlFor={id2}>Description</label>
-                            <textarea id={id2} name="description"
+                            <label htmlFor='description'>Description</label>
+                            <textarea id='description' name="description"
                                 className="form-control"
                                 defaultValue={task?.description ?? ''}
                                 style={{ minHeight: '170px' }} />
                         </div>
                         <div className="from-group">
-                            <label htmlFor={id3}>Date limite</label>
-                            <input type="date"
+                            <label htmlFor='date'>Date limite</label>
+                            <input type="datetime-local"
                                 defaultValue={task?.dateline ?? ''}
                                 name="dateline"
-                                id={id3} className="form-control" />
+                                id='date' className="form-control" />
                         </div>
-                        <div className="from-check mt-2 form-switch">
-                            <input type="hidden" value={false} name="status" />
-                            <input type="checkbox" name="status"
-                                id={id4}
-                                defaultChecked={task?.status ?? false}
-                                className="form-check-input" />
-                            <label htmlFor={id4} className="ml-2 form-check-label">Fait ?</label>
-                        </div>
+                        {id &&
+                            <div className="from-check mt-2 form-switch">
+                                <input type="hidden" value={false} name="status" />
+                                <input type="checkbox" name="status"
+                                    id='checkbox'
+                                    defaultChecked={task?.status ?? false}
+                                    className="form-check-input" />
+                                <label htmlFor='checkbox' className="ml-2 form-check-label">Fait ?</label>
+                            </div>
+                        }
                         <div className="text-center mt-2">
                             <button className="btn btn-primary" type="submit">
                                 {task ? 'Modifier' : 'Enregistrer'}

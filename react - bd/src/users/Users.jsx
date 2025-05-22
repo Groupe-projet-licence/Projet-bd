@@ -1,3 +1,7 @@
+/**
+ * Affiche l'ensemble des utilisateurs inscrits
+ */
+
 import { useEffect } from "react"
 import { useFlashMessage } from "../Contexts/FlashProvider"
 

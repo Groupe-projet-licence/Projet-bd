@@ -1,3 +1,7 @@
+/**
+ * Contexte pour la gestion de l'état du message flash 
+ */
+
 import { createContext, useContext, useState } from "react"
 
 const flashMessageContext = createContext()

@@ -1,8 +1,11 @@
+/**
+ * Affiche normalement la page d'accueil. 
+ * Mais pour le moment, ce composant fait juste une redirection vers le formulaire d'inscription.
+ */
+
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { useFlashMessage } from "./Contexts/FlashProvider"
 import { useUser } from "./Contexts/AuthProvider"
-
 
 
 export default function Home() {
