@@ -1,5 +1,5 @@
 /**
- * Affichage d'une tache
+ * Affichage d'une tâche
  * @param {idT:number,title:string, dateline:date, status:boolean} task 
  */
 
@@ -18,9 +18,9 @@ export default function Task({ task }) {
                 headers: { Authorization: `Bearer ${token}` }
             })
             navigate('/tasks')
-            showFlashMsg(`La tache a été supprimé avez success`)
+            showFlashMsg(`La tâche a été supprimé avez success`)
         } catch (e) {
-            showFlashMsg("Une erreur s'est produit et la tache n'a pas pu etre supprimée", "danger")
+            showFlashMsg("Une erreur s'est produit et la tâche n'a pas pu etre supprimée", "danger")
         }
     }
 
@@ -32,7 +32,7 @@ export default function Task({ task }) {
                 <Link className="btn btn-success" to='/'>update</Link>
                 <button className="btn btn-warning mx-2"
                     type="submit"
-                    onClick={confirm('Voulez-vous vraiment supprimer cette tache ?')}>
+                    onClick={confirm('Voulez-vous vraiment supprimer cette tâche ?')}>
                     delete
                 </button>
             </form>

@@ -13,9 +13,6 @@ export default function Register() {
     const { user, login } = useUser()
     const { showFlashMsg } = useFlashMessage()
 
-    //L'instruction suivante permet de masquer les éventuelles messages flash issues des pages précédentes
-    showFlashMsg()
-
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -28,7 +25,7 @@ export default function Register() {
         const role = 'USER'
         const credentials = { username, email, password, role }
         try {
-            const response = await axios.post("http://localhost:8080/api/users/register ", credentials)
+            const response = await axios.post("http://localhost:8080/api/users/register", credentials)
             login(response.data.token)
             navigate("/tasks")
         } catch (e) {
@@ -37,6 +34,8 @@ export default function Register() {
     }
 
     useEffect(() => {
+        //L'instruction suivante permet de masquer les éventuelles messages flash issues des pages précédentes
+        showFlashMsg()
         if (user) {
             navigate('/tasks')
         }

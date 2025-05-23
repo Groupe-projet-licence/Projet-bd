@@ -14,8 +14,46 @@ import CreateEditTask from './Tasks/CreateEditTask'
 import Tasks from './Tasks/Tasks'
 
 
+import { useEffect } from 'react';
+import axios from 'axios';
+import { messaging, getToken, onMessage } from './firebase-config';
+
+
+
 
 function App() {
+
+  //Pour la reception des notifiactions
+  const token = localStorage.getItem('token')
+
+  useEffect(() => {
+    getToken(messaging, { vapidKey: "TA_VAPID_KEY" }).then((currentToken) => {
+      if (currentToken) {
+        // Appel direct au backend pour enregistrer le token
+        axios.post("http://localhost:8080/api/users/token", {
+          fcmToken: currentToken,
+          userId: "ID_DE_LUTILISATEUR"
+          // ici, récupère le vrai userId depuis le système d'auth React/JWT
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        }).catch(error => {
+          console.error("Erreur lors de l'enregistrement du token FCM :", error);
+        });
+      }
+    }).catch((err) => {
+      console.error("Impossible de récupérer le token FCM :", err);
+    });
+
+    // Réception des notifications en live pendant que l’app est ouverte
+    onMessage(messaging, (payload) => {
+      alert(payload.notification.title + "\n" + payload.notification.body);
+    });
+  }, []);
+
+
   return <BrowserRouter >
     <FlashProvider>
       <AuthProvider>

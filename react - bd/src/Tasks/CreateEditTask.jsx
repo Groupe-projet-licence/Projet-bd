@@ -1,5 +1,5 @@
 /**
- * Composant permettant la creation et la modification d'une tache
+ * Composant permettant la creation et la modification d'une tâche
  */
 
 import { useEffect, useMemo, useState } from "react"
@@ -68,7 +68,7 @@ export default function CreateEditTask() {
                 const response = await axios.patch(`htpp://localhost:8080/api/tasks/${id}/edit`, dataTask)
             }
             navigate('/tasks')
-            showFlashMsg(`Taches ${task ? 'modifier' : 'creer'} avez success`)
+            showFlashMsg(`tâches ${task ? 'modifier' : 'creer'} avez success`)
 
         } catch (e) {
             showFlashMsg("Une erreur s'est produit, veuillez réessayer!", "danger")

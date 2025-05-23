@@ -1,5 +1,5 @@
 /**
- * Affiche un tableau contenant l'ensemble des taches enregistées
+ * Affiche un tableau contenant l'ensemble des tâches enregistées
  */
 
 import { useEffect, useState } from "react"
@@ -22,8 +22,8 @@ export default function Tasks() {
     const [tasks, setTasks] = useState([])
 
     // const tasks = [
-    //     { idT: 1, title: "Ma tache 1", dateline: "15-05-2025", status: false },
-    //     { idT: 2, title: "Ma tache 2", dateline: "15-05-2025", status: true },
+    //     { idT: 1, title: "Ma tâche 1", dateline: "15-05-2025", status: false },
+    //     { idT: 2, title: "Ma tâche 2", dateline: "15-05-2025", status: true },
     // ]
 
     useEffect(() => {
@@ -34,7 +34,7 @@ export default function Tasks() {
                 })
                 setTasks(response.data)
             } catch (error) {
-                showFlashMsg("Une erreur s'est produit et les taches n'ont pas pu etre recuperées", "danger")
+                showFlashMsg("Une erreur s'est produit et les tâches n'ont pas pu etre recuperées", "danger")
             }
         }
         if (!user) {
@@ -69,7 +69,7 @@ export default function Tasks() {
                             onChange={() => { setNotDone(!notDone) }} />
                         <label htmlFor="checkbox"
                             className="form-check-label">
-                            Afficher les taches non faite ?
+                            Afficher les tâches non faite ?
                         </label>
                     </div>
                     <Link to="/tasks/create"
