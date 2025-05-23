@@ -1,10 +1,10 @@
-package com.example.taches;
+package com.task.task_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TachesApplicationTests {
+class TaskServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

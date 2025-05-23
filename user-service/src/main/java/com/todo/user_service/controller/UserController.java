@@ -13,7 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 @CrossOrigin
 public class UserController {
