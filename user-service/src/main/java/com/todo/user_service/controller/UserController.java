@@ -12,10 +12,10 @@ import org.springframework.security.core.AuthenticationException;
 
 import java.util.List;
 
+@RequiredArgsConstructor
+@CrossOrigin(origins="http://localhost:5173")
 @RestController
 @RequestMapping("/api/users")
-@RequiredArgsConstructor
-@CrossOrigin
 public class UserController {
 
     private final UserService service;
@@ -23,13 +23,17 @@ public class UserController {
     private final JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        try {
-            return ResponseEntity.ok(service.save(user));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+public ResponseEntity<?> register(@RequestBody User user) {
+    try {
+        service.save(user); // on sauvegarde l'utilisateur
+
+        String token = jwtService.generateToken(user.getUsername());
+        return ResponseEntity.ok(new AuthResponse(token));
+
+    } catch (RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
+}
 
     @PostMapping("/login")
 public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {

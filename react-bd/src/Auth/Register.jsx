@@ -19,20 +19,26 @@ export default function Register() {
 
 
     const navigate = useNavigate()
+const handleSubmit = async (e) => {
+    e.preventDefault(); 
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        const role = 'USER'
-        const credentials = { username, email, password, role }
-        try {
-            const response = await axios.post("http://localhost:8080/api/users/register", credentials)
-            login(response.data.token)
-            navigate("/tasks")
-        } catch (e) {
-            showFlashMsg("Une erreur s'est produit et nous n'avons pas pu vous inscrire; veuillez réessayer!", "danger")
-        }
+    const role = 'USER';
+    const credentials = { username, email, password, role };
+    console.log("Données envoyées :", credentials);
+
+    try {
+        const response = await axios.post("http://localhost:8081/api/users/register", credentials);
+        login(response.data.token);
+        navigate("/tasks");
+    } catch (e) {
+        console.error("Erreur serveur :", e.response?.data || e.message);
+        showFlashMsg(
+            "Une erreur s'est produite et nous n'avons pas pu vous inscrire ; veuillez réessayer !",
+            "danger"
+        );
     }
-
+};
+    
     useEffect(() => {
         //L'instruction suivante permet de masquer les éventuelles messages flash issues des pages précédentes
         showFlashMsg()

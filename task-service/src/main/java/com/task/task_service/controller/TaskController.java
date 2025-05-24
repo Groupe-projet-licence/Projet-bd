@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
+@CrossOrigin(origins="http://localhost:5173")
 public class TaskController {
 
     private final TaskService taskService;
@@ -22,26 +23,26 @@ public class TaskController {
         return taskService.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/edit")
     public ResponseEntity<Task> getTask(@PathVariable Long id) {
         return taskService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public Task createTask(@RequestBody Task task) {
         return taskService.create(task);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}/edit")
     public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
         return taskService.update(id, task)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.delete(id);
         return ResponseEntity.noContent().build();

@@ -29,7 +29,7 @@ export default function Tasks() {
     useEffect(() => {
         const fetchTascks = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/tasks', {
+                const response = await axios.get('http://localhost:8082/api/tasks', {
                     headers: { Authorization: `Bearer ${token}` }
                 })
                 setTasks(response.data)
@@ -46,13 +46,15 @@ export default function Tasks() {
 
     const visibleTasks = tasks.filter(t => {
         if (notDone && t.status) {
+            console.log(t);
             return false
         }
         return true
     })
+    
 
     const TasksToDisplay = visibleTasks.map(t =>
-        (<Task key={t.idT} task={t} />)
+        (<Task key={t.id} task={t} />)
     )
 
     return <div className="container">

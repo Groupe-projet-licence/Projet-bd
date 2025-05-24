@@ -3,17 +3,19 @@
  */
 import { useUser } from "../Contexts/AuthProvider"
 import axios from "axios"
+import { useFlashMessage } from "../Contexts/FlashProvider"
 
 export default function Login() {
 
-    const { user, login } = useUser()
+    const { login } = useUser()
+    const { showFlashMsg } = useFlashMessage()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         const email = e.target.email.value;
         const password = e.target.password.value;
         try {
-            const response = await axios.post("http://localhost:8080/api/users/login", { email, password })
+            const response = await axios.post("http://localhost:8081/api/users/login", { email, password })
             login(response.data.token)
             navigate("/tasks")
         } catch (e) {

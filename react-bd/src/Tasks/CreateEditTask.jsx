@@ -22,18 +22,23 @@ export default function CreateEditTask() {
         if (!user) {
             navigate('/users/register')
         }
+        if (!id) {
+            navigate(-1)
+        }
     }, [user])
 
     useMemo(async () => {
         if (id) {
             try {
                 const token = localStorage.getItem('token')
-                const response = await axios.get(`htpp://localhost:8080/api/tasks/${id}/edit`, {
+                console.log(token);
+                
+                const response = await axios.get(`http://localhost:8082/api/tasks/${id}/edit`,{
                     headers: { Authorization: `Bearer ${token}` }
                 })
                 setTask(response.data)
             } catch (e) {
-                navigate(-1)
+                console.log(e);
                 showFlashMsg("Une erreur s'est produit", "danger")
             }
         }
@@ -46,7 +51,8 @@ export default function CreateEditTask() {
         const title = e.target.title.value;
         const description = e.target.description.value;
         const dateline = e.target.dateline.value;
-        const status = e.target.status?.value ?? false;
+        const status1 = e.target.status?.value ?? false;
+        const status = status1 ? "DONE" : "EN_COURS";
         const dataTask = { title, description, dateline, status }
 
         const token = localStorage.getItem('token')
@@ -59,13 +65,11 @@ export default function CreateEditTask() {
                 //La route etant protegée (on a besoin d'etre connecté pour y accéder), 
                 // on ajoute un token pour la vérification coté backend
 
-                const response = await axios.post(`htpp://localhost:8080/api/tasks/create`,
-                    dataTask, {
-                    headers: { Authorization: `Bearer ${token}` }
-                })
+                const response = await axios.post(`http://localhost:8082/api/tasks/create`,
+                    dataTask)
             } else {
                 //Si c'est un produit à modifier
-                const response = await axios.patch(`htpp://localhost:8080/api/tasks/${id}/edit`, dataTask)
+                const response = await axios.patch(`http://localhost:8082/api/tasks/${id}/edit`, dataTask)
             }
             navigate('/tasks')
             showFlashMsg(`tâches ${task ? 'modifier' : 'creer'} avez success`)

@@ -30,7 +30,7 @@ function App() {
     getToken(messaging, { vapidKey: "TA_VAPID_KEY" }).then((currentToken) => {
       if (currentToken) {
         // Appel direct au backend pour enregistrer le token
-        axios.post("http://localhost:8080/api/users/token", {
+        axios.post("http://localhost:8081/api/users/token", {
           fcmToken: currentToken,
           userId: "ID_DE_LUTILISATEUR"
           // ici, récupère le vrai userId depuis le système d'auth React/JWT

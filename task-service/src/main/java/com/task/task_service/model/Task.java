@@ -25,12 +25,12 @@ public class Task {
     private LocalDateTime updatedAt;
 
     @Column(name = "deadline")
-    private LocalDateTime deadline;
+    private String deadline;
 
     // Constructeurs
     public Task() {}
 
-    public Task(String title, String description, String status, LocalDateTime deadline) {
+    public Task(String title, String description, String status, String deadline) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -78,11 +78,11 @@ public class Task {
         return updatedAt;
     }
 
-    public LocalDateTime getDeadline() {
+    public String getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(LocalDateTime deadline) {
+    public void setDeadline(String deadline) {
         this.deadline = deadline;
         this.updatedAt = LocalDateTime.now();
     }
