@@ -25,10 +25,11 @@ export default function CreateEditTask() {
             const fetchTask = async () => {
                 try {
                     const response = await axios.get(`http://localhost:8082/api/tasks/${id}/edit`, {
-                        headers: { Authorization:` Bearer ${token} `}
+                        headers: { Authorization: ` Bearer ${token} ` }
                     })
                     setTask(response.data)
                 } catch (e) {
+                    console.log(e);
                     showFlashMsg("Erreur lors du chargement de la tâche", "danger")
                 }
             }
@@ -46,24 +47,25 @@ export default function CreateEditTask() {
         const dataTask = { title, description, deadline, status }
 
         if (!title.trim() || !description.trim() || !deadline) {
-    showFlashMsg("Veuillez remplir tous les champs obligatoires.", "danger");
-    return; //validation des donnees
-}
+            showFlashMsg("Veuillez remplir tous les champs obligatoires.", "danger");
+            return; //validation des donnees
+        }
 
         try {
             if (!task) {
                 await axios.post("http://localhost:8082/api/tasks/create", dataTask, {
-                    headers: { Authorization: `Bearer ${token} `}
+                    headers: { Authorization: `Bearer ${token} ` }
                 })
                 showFlashMsg("Tâche créée avec succès", "success")
             } else {
                 await axios.patch(`http://localhost:8082/api/tasks/${id}/edit`, dataTask, {
-                    headers: { Authorization:`Bearer ${token}`}
+                    headers: { Authorization: `Bearer ${token}` }
                 })
                 showFlashMsg("Tâche modifiée avec succès", "success")
             }
             navigate('/tasks')
         } catch (e) {
+            console.log(e);
             showFlashMsg("Erreur lors de l'enregistrement de la tâche", "danger")
         }
     }

@@ -18,14 +18,12 @@ export default function Task({ task }) {
         try {
             const response = await axios.delete(`http://localhost:8082/api/tasks/${task.id}`)
             //navigate('/tasks')
-            refresh
             showFlashMsg(`La tâche a été supprimé avez success`)
         } catch (e) {
+            console.log(e);
             showFlashMsg("Une erreur s'est produit et la tâche n'a pas pu etre supprimée", "danger")
         }
-    }
-    console.log(task);
-    
+    }    
 
     return <tr>
         <td>{task.title}</td>

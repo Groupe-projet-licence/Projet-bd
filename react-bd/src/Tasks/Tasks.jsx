@@ -19,10 +19,11 @@ export default function Tasks() {
     const fetchTasks = async () => {
         try {
             const response = await axios.get('http://localhost:8082/api/tasks', {
-                headers: { Authorization:` Bearer ${token} `}
+                headers: { Authorization: ` Bearer ${token} ` }
             })
             setTasks(response.data)
-        } catch (error) {
+        } catch (e) {
+            console.log(e);
             showFlashMsg("Une erreur s'est produite et les tâches n'ont pas pu être récupérées", "danger")
         }
     }
@@ -33,11 +34,12 @@ export default function Tasks() {
 
         try {
             await axios.delete(`http://localhost:8082/api/tasks/${id}`, {
-                headers: { Authorization:` Bearer ${token}` }
+                headers: { Authorization: ` Bearer ${token}` }
             })
             showFlashMsg("Tâche supprimée avec succès.", "success")
             fetchTasks()
-        } catch (error) {
+        } catch (e) {
+            console.log(e);
             showFlashMsg("Erreur lors de la suppression.", "danger")
         }
     }
@@ -47,7 +49,7 @@ export default function Tasks() {
     //     { idT: 2, title: "Ma tâche 2", dateline: "15-05-2025", status: true },
     // ]
 
-     useEffect(() => {
+    useEffect(() => {
         if (!user) {
             navigate('/users/register')
         } else {
