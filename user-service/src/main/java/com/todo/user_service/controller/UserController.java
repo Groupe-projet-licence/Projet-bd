@@ -39,13 +39,13 @@ public ResponseEntity<?> register(@RequestBody User user) {
 public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
     try {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+            new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
         );
     } catch (AuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
 
-    String token = jwtService.generateToken(authRequest.getUsername());
+    String token = jwtService.generateToken(authRequest.getEmail());
     return ResponseEntity.ok(new AuthResponse(token));
 }
 
@@ -57,7 +57,7 @@ public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
 
 @Data
 class AuthRequest {
-    private String username;
+    private String email;
     private String password;
 }
 

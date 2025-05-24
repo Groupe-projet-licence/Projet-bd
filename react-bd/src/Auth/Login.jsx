@@ -11,17 +11,17 @@ export default function Login() {
     const { showFlashMsg } = useFlashMessage()
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        const email = e.target.email.value;
-        const password = e.target.password.value;
-        try {
-            const response = await axios.post("http://localhost:8081/api/users/login", { email, password })
-            login(response.data.token)
-            navigate("/tasks")
-        } catch (e) {
-            showFlashMsg("N'avons pas pu vous connecter; veuillez réessayer!", "danger")
-        }
+    e.preventDefault();
+    const username = e.target.email.value; // récupère username, pas email
+    const password = e.target.password.value;
+    try {
+        const response = await axios.post("http://localhost:8081/api/users/login", { email, password });
+        login(response.data.token);
+        navigate("/tasks");
+    } catch (e) {
+        showFlashMsg("N'avons pas pu vous connecter; veuillez réessayer!", "danger");
     }
+}
 
     return <div className="container">
         <div className="row justify-content-center">

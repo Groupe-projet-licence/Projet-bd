@@ -7,7 +7,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,16 +16,12 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public User save(User user) {
-        if (repository.findByUsername(user.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return repository.save(user);
+    if (repository.findByEmail(user.getEmail()).isPresent()) {
+        throw new RuntimeException("Email already exists");
     }
-
-    public Optional<User> getByUsername(String username) {
-        return repository.findByUsername(username);
-    }
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    return repository.save(user);
+}
 
     public List<User> getAll() {
         return repository.findAll();
